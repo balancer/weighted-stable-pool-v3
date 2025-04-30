@@ -13,10 +13,10 @@ import {
 import { CastingHelpers } from "@balancer-labs/v3-solidity-utils/contracts/helpers/CastingHelpers.sol";
 import { BaseVaultTest } from "@balancer-labs/v3-vault/test/foundry/utils/BaseVaultTest.sol";
 
-import { CustomPoolFactory } from "../../contracts/CustomPoolFactory.sol";
-import { CustomPool } from "../../contracts/CustomPool.sol";
+import { WeightedStablePoolFactory } from "../../contracts/WeightedStablePoolFactory.sol";
+import { WeightedStablePool } from "../../contracts/WeightedStablePool.sol";
 
-contract CustomPoolTest is BaseVaultTest {
+contract WeightedStablePoolTest is BaseVaultTest {
     using CastingHelpers for address[];
 
     uint256 constant _MIN_NUM_TOKENS = 2;
@@ -26,10 +26,10 @@ contract CustomPoolTest is BaseVaultTest {
     string constant _FACTORY_VERSION = "v1.0.0";
     string constant _POOL_VERSION = "v1.0.0";
 
-    CustomPoolFactory private _factory;
+    WeightedStablePoolFactory private _factory;
 
     function createPoolFactory() internal override returns (address) {
-        _factory = new CustomPoolFactory(vault, 365 days, _FACTORY_VERSION, _POOL_VERSION);
+        _factory = new WeightedStablePoolFactory(vault, 365 days, _FACTORY_VERSION, _POOL_VERSION);
         vm.label(address(_factory), "Custom Pool Factory");
 
         return address(_factory);
@@ -75,7 +75,7 @@ contract CustomPoolTest is BaseVaultTest {
             balancesScaled18[i] = bound(balancesScaled18[i], 1e6, DEFAULT_AMOUNT);
         }
 
-        uint256 amountReceivedScaled18 = CustomPool(pool).onSwap(
+        uint256 amountReceivedScaled18 = WeightedStablePool(pool).onSwap(
             PoolSwapParams({
                 kind: SwapKind.EXACT_IN,
                 amountGivenScaled18: amountGivenScaled18,

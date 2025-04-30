@@ -17,7 +17,7 @@ import * as VaultDeployer from '@balancer-labs/v3-helpers/src/models/vault/Vault
 import { IVaultMock } from '@balancer-labs/v3-interfaces/typechain-types';
 import TypesConverter from '@balancer-labs/v3-helpers/src/models/types/TypesConverter';
 import { buildTokenConfig } from '@balancer-labs/v3-helpers/src/models/tokens/tokenConfig';
-import { CustomPool, CustomPoolFactory } from '../typechain-types';
+import { WeightedStablePool, WeightedStablePoolFactory } from '../typechain-types';
 import { actionId } from '@balancer-labs/v3-helpers/src/models/misc/actions';
 import { MONTH } from '@balancer-labs/v3-helpers/src/time';
 import * as expectEvent from '@balancer-labs/v3-helpers/src/test/expectEvent';
@@ -27,7 +27,7 @@ import { IPermit2 } from '@balancer-labs/v3-vault/typechain-types/permit2/src/in
 import { PoolConfigStructOutput } from '@balancer-labs/v3-interfaces/typechain-types/contracts/vault/IVault';
 import { TokenConfigStruct } from '../typechain-types/@balancer-labs/v3-interfaces/contracts/vault/IVault';
 
-describe('CustomPool', function () {
+describe('WeightedStablePool', function () {
   const FACTORY_VERSION = 'Custom Pool Factory v1';
   const POOL_VERSION = 'Custom Pool v1';
   const ROUTER_VERSION = 'Router v11';
@@ -42,8 +42,8 @@ describe('CustomPool', function () {
 
   let permit2: IPermit2;
   let vault: IVaultMock;
-  let factory: CustomPoolFactory;
-  let pool: CustomPool;
+  let factory: WeightedStablePoolFactory;
+  let pool: WeightedStablePool;
   let router: Router;
   let alice: SignerWithAddress;
   let bob: SignerWithAddress;
@@ -73,7 +73,7 @@ describe('CustomPool', function () {
   });
 
   sharedBeforeEach('create and initialize pool', async () => {
-    factory = await deploy('CustomPoolFactory', {
+    factory = await deploy('WeightedStablePoolFactory', {
       args: [await vault.getAddress(), MONTH * 12, FACTORY_VERSION, POOL_VERSION],
     });
     poolTokens = sortAddresses([tokenAAddress, tokenBAddress]);
@@ -81,7 +81,7 @@ describe('CustomPool', function () {
     const tokenConfig: TokenConfigStruct[] = buildTokenConfig(poolTokens);
 
     const tx = await factory.create(
-      'CustomPool',
+      'WeightedStablePool',
       'Test',
       tokenConfig,
       { pauseManager: ZERO_ADDRESS, swapFeeManager: ZERO_ADDRESS, poolCreator: ZERO_ADDRESS },
@@ -94,7 +94,7 @@ describe('CustomPool', function () {
     const receipt = await tx.wait();
     const event = expectEvent.inReceipt(receipt, 'PoolCreated');
 
-    pool = (await deployedAt('CustomPool', event.args.pool)) as unknown as CustomPool;
+    pool = (await deployedAt('WeightedStablePool', event.args.pool)) as unknown as WeightedStablePool;
 
     await tokenA.mint(bob, TOKEN_AMOUNT + SWAP_AMOUNT);
     await tokenB.mint(bob, TOKEN_AMOUNT);

@@ -13,9 +13,9 @@ import { IPoolVersion } from "@balancer-labs/v3-interfaces/contracts/solidity-ut
 import { BasePoolFactory } from "@balancer-labs/v3-pool-utils/contracts/BasePoolFactory.sol";
 import { Version } from "@balancer-labs/v3-solidity-utils/contracts/helpers/Version.sol";
 
-import { CustomPool } from "./CustomPool.sol";
+import { WeightedStablePool } from "./WeightedStablePool.sol";
 
-contract CustomPoolFactory is BasePoolFactory, Version, IPoolVersion {
+contract WeightedStablePoolFactory is BasePoolFactory, Version, IPoolVersion {
     string private _poolVersion;
 
     constructor(
@@ -23,7 +23,7 @@ contract CustomPoolFactory is BasePoolFactory, Version, IPoolVersion {
         uint32 pauseWindowDuration,
         string memory factoryVersion,
         string memory poolVersion
-    ) BasePoolFactory(vault, pauseWindowDuration, type(CustomPool).creationCode) Version(factoryVersion) {
+    ) BasePoolFactory(vault, pauseWindowDuration, type(WeightedStablePool).creationCode) Version(factoryVersion) {
         _poolVersion = poolVersion;
     }
 
@@ -33,7 +33,7 @@ contract CustomPoolFactory is BasePoolFactory, Version, IPoolVersion {
     }
 
     /**
-     * @notice Deploys a new `CustomPool`.
+     * @notice Deploys a new `WeightedStablePool`.
      * @param name The name of the pool
      * @param symbol The symbol of the pool
      * @param tokens An array of descriptors for the tokens the pool will manage

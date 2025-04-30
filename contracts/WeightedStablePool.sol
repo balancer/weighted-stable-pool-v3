@@ -14,7 +14,7 @@ import { BalancerPoolToken } from "@balancer-labs/v3-vault/contracts/BalancerPoo
 import { Version } from "@balancer-labs/v3-solidity-utils/contracts/helpers/Version.sol";
 import { PoolInfo } from "@balancer-labs/v3-pool-utils/contracts/PoolInfo.sol";
 
-contract CustomPool is BalancerPoolToken, PoolInfo, Version, IBasePool {
+contract WeightedStablePool is BalancerPoolToken, PoolInfo, Version, IBasePool {
     uint256 private constant _MAX_INVARIANT_RATIO = 1000e16; // 1000%
     uint256 private constant _MIN_INVARIANT_RATIO = 10e16; // 10%
     uint256 private constant _MAX_SWAP_FEE_PERCENTAGE = 50e16; // 50%
